@@ -1,0 +1,83 @@
+{
+    "Items": [
+        {
+            "createdAt": {
+                "S": "2025-07-12T02:31:45.074Z"
+            },
+            "password": {
+                "NULL": true
+            },
+            "voiceMemoUrls": {
+                "L": []
+            },
+            "imageUrls": {
+                "L": []
+            },
+            "memo": {
+                "S": "Test memo"
+            },
+            "id": {
+                "S": "box01"
+            },
+            "title": {
+                "S": "Test Box"
+            },
+            "userId": {
+                "S": "test-user"
+            },
+            "expiresAt": {
+                "NULL": true
+            },
+            "status": {
+                "S": "active"
+            },
+            "isFavorite": {
+                "BOOL": false
+            },
+            "updatedAt": {
+                "S": "2025-07-12T02:31:45.074Z"
+            }
+        },
+        {
+            "createdAt": {
+                "S": "2025-07-11T08:42:09.417Z"
+            },
+            "password": {
+                "NULL": true
+            },
+            "voiceMemoUrls": {
+                "L": []
+            },
+            "imageUrls": {
+                "L": []
+            },
+            "memo": {
+                "S": "Test memo"
+            },
+            "id": {
+                "S": "test-box-id"
+            },
+            "title": {
+                "S": "Test Box"
+            },
+            "userId": {
+                "S": "test-user"
+            },
+            "expiresAt": {
+                "NULL": true
+            },
+            "status": {
+                "S": "active"
+            },
+            "isFavorite": {
+                "BOOL": false
+            },
+            "updatedAt": {
+                "S": "2025-07-11T08:42:09.417Z"
+            }
+        }
+    ],
+    "Count": 2,
+    "ScannedCount": 2,
+    "ConsumedCapacity": null
+}

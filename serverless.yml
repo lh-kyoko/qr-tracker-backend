@@ -1,0 +1,815 @@
+service: qr-tracker-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-northeast-1
+  stage: ${opt:stage, 'dev'}
+
+  # デプロイバケット設定
+  deploymentBucket:
+    name: qr-tracker-api-dev-deployment-bucket
+    blockPublicAccess: true
+
+  # ログ設定
+  logRetentionInDays: 7
+
+  # Lambda関数のログ設定
+  logs:
+    restApi: true
+
+  # API Gateway設定
+  apiGateway:
+    shouldStartNameWithService: true
+    # バイナリメディアタイプを削除（JSONデータはBase64エンコード不要）
+    # binaryMediaTypes:
+    #   - "*/*"
+    resourcePolicy:
+      - Effect: Allow
+        Principal: "*"
+        Action: execute-api:Invoke
+        Resource: execute-api:/*
+        Condition:
+          IpAddress:
+            aws:SourceIp:
+              - "127.0.0.1/32"
+              - "::1/128"
+              - ${env:HOME_IP, '0.0.0.0/0'}
+              - ${env:WORK_IP, '0.0.0.0/0'}
+              - ${env:OFFICE_IP, '0.0.0.0/0'}
+      - Effect: Deny
+        Principal: "*"
+        Action: execute-api:Invoke
+        Resource:
+          - "execute-api:/*/POST/admin/*"
+          - "execute-api:/*/GET/admin/*"
+          - "execute-api:/*/DELETE/admin/*"
+        Condition:
+          NotIpAddress:
+            aws:SourceIp:
+              - "127.0.0.1/32"
+              - "::1/128"
+              - ${env:HOME_IP, '0.0.0.0/0'}
+              - ${env:WORK_IP, '0.0.0.0/0'}
+              - ${env:OFFICE_IP, '0.0.0.0/0'}
+
+  # 環境変数
+  environment:
+    BOXES_TABLE: ${self:service}-boxes-${self:provider.stage}
+    USERS_TABLE: ${self:service}-users-${self:provider.stage}
+    BOX_IDS_TABLE: ${self:service}-box-ids-${self:provider.stage}
+    S3_BUCKET: ${self:service}-files-${self:provider.stage}
+    ALLOWED_ADMIN_IPS: ${env:ALLOWED_ADMIN_IPS, '127.0.0.1'}
+    COGNITO_USER_POOL_ID: ${env:NEXT_PUBLIC_USER_POOL_ID}
+    COGNITO_CLIENT_ID: ${env:NEXT_PUBLIC_USER_POOL_CLIENT_ID}
+
+  # IAM権限
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:BatchWriteItem
+          Resource:
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOXES_TABLE}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOXES_TABLE}/index/*"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOX_IDS_TABLE}"
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:DeleteObject
+          Resource:
+            - "arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*"
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource:
+            - "arn:aws:logs:${self:provider.region}:*:*"
+        - Effect: Allow
+          Action:
+            - cognito-idp:AdminInitiateAuth
+            - cognito-idp:AdminGetUser
+            - cognito-idp:AdminListGroupsForUser
+            - cognito-idp:AdminCreateUser
+            - cognito-idp:AdminSetUserPassword
+            - cognito-idp:AdminDeleteUser
+            - cognito-idp:AdminAddUserToGroup
+            - cognito-idp:AdminRemoveUserFromGroup
+            - cognito-idp:ListUsers
+            - cognito-idp:ListGroups
+            - cognito-idp:DescribeUserPool
+          Resource:
+            - "arn:aws:cognito-idp:${self:provider.region}:*:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+
+# カスタムドメイン用のプラグイン
+plugins:
+  - serverless-domain-manager
+  # - serverless-offline
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  endpoint:
+    dev: "api-dev.nest-tag.com"
+    prod: "api.nest-tag.com"
+  customDomain:
+    domainName: ${self:custom.endpoint.${self:custom.stage}}
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+    endpointType: "regional"
+    securityPolicy: tls_1_2
+    certificateName: "*.nest-tag.com"
+
+  # serverless-offline:
+  #   httpPort: 3003
+  #   lambdaPort: 3003
+
+functions:
+  getBox:
+    handler: src/handlers/getBox.handler
+    events:
+      - http:
+          path: /boxes/{id}
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                id: true
+    # ログ設定（一時的に無効）
+    # logRetentionInDays: 7
+
+  registerBox:
+    handler: src/handlers/registerBox.handler
+    events:
+      - http:
+          path: /boxes/{id}/register
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                id: true
+    # ログ設定
+    logRetentionInDays: 7
+
+  updateBox:
+    handler: src/handlers/updateBox.handler
+    events:
+      - http:
+          path: /boxes/{id}
+          method: put
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                id: true
+    # ログ設定
+    logRetentionInDays: 7
+
+  getUserBoxes:
+    handler: src/handlers/getUserBoxes.handler
+    events:
+      - http:
+          path: /user/boxes
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  checkBoxStatus:
+    handler: src/handlers/checkBoxStatus.handler
+    events:
+      - http:
+          path: /boxes/{id}/status
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                id: true
+    # ログ設定
+    logRetentionInDays: 7
+
+  getUploadUrl:
+    handler: src/handlers/getUploadUrl.handler
+    events:
+      - http:
+          path: /upload-url
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  toggleFavorite:
+    handler: src/handlers/toggleFavorite.handler
+    events:
+      - http:
+          path: /boxes/{id}/favorite
+          method: put
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                id: true
+    # ログ設定
+    logRetentionInDays: 7
+
+  checkPassword:
+    handler: src/handlers/checkPassword.handler
+    events:
+      - http:
+          path: /boxes/{id}/check-password
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                id: true
+    # ログ設定
+    logRetentionInDays: 7
+
+  checkExpiration:
+    handler: src/handlers/checkExpiration.handler
+    events:
+      - http:
+          path: /boxes/{id}/expiration
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                id: true
+    # ログ設定
+    logRetentionInDays: 7
+
+  forgotPassword:
+    handler: src/handlers/forgotPassword.handler
+    events:
+      - http:
+          path: /auth/forgot-password
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  confirmForgotPassword:
+    handler: src/handlers/confirmForgotPassword.handler
+    events:
+      - http:
+          path: /auth/confirm-forgot-password
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  getAdminBoxes:
+    handler: src/handlers/getAdminBoxes.handler
+    events:
+      - http:
+          path: /admin/boxes
+          method: get
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  getAdminFilePresigned:
+    handler: src/handlers/getAdminFilePresigned.handler
+    events:
+      - http:
+          path: /admin/files/presigned
+          method: post
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  adminAuth:
+    handler: src/handlers/adminAuth.handler
+    events:
+      - http:
+          path: /admin/auth
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  getFilePresigned:
+    handler: src/handlers/getFilePresigned.handler
+    events:
+      - http:
+          path: /files/presigned
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  getBoxIds:
+    handler: src/handlers/getBoxIds.handler
+    events:
+      - http:
+          path: /admin/box-ids
+          method: get
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  createBoxId:
+    handler: src/handlers/createBoxId.handler
+    events:
+      - http:
+          path: /admin/box-ids
+          method: post
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  deleteBoxId:
+    handler: src/handlers/deleteBoxId.handler
+    events:
+      - http:
+          path: /admin/box-ids/{boxId}
+          method: delete
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                boxId: true
+    # ログ設定
+    logRetentionInDays: 7
+
+  uploadBoxIds:
+    handler: src/handlers/uploadBoxIds.handler
+    events:
+      - http:
+          path: /admin/box-ids/upload
+          method: post
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+
+
+  deleteAdminBox:
+    handler: src/handlers/deleteAdminBox.handler
+    events:
+      - http:
+          path: /admin/boxes/{id}
+          method: delete
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                id: true
+    # ログ設定
+    logRetentionInDays: 7
+
+  exportAdminData:
+    handler: src/handlers/exportAdminData.handler
+    events:
+      - http:
+          path: /admin/export
+          method: get
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  getAdminUsers:
+    handler: src/handlers/getAdminUsers.handler
+    events:
+      - http:
+          path: /admin/users
+          method: get
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  createAdminUser:
+    handler: src/handlers/createAdminUser.handler
+    events:
+      - http:
+          path: /admin/users
+          method: post
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    # ログ設定
+    logRetentionInDays: 7
+
+  updateAdminUser:
+    handler: src/handlers/updateAdminUser.handler
+    events:
+      - http:
+          path: /admin/users/{username}
+          method: put
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                username: true
+    # ログ設定
+    logRetentionInDays: 7
+
+  deleteAdminUser:
+    handler: src/handlers/deleteAdminUser.handler
+    events:
+      - http:
+          path: /admin/users/{username}
+          method: delete
+          authorizer:
+            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                username: true
+    # ログ設定
+    logRetentionInDays: 7
+
+resources:
+  Resources:
+    BoxesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.BOXES_TABLE}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: userId-index
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+
+    BoxIdsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.BOX_IDS_TABLE}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: boxId
+            AttributeType: S
+          - AttributeName: activationDate
+            AttributeType: S
+        KeySchema:
+          - AttributeName: boxId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: activationDate-index
+            KeySchema:
+              - AttributeName: activationDate
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    FilesBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.S3_BUCKET}
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          IgnorePublicAcls: false
+          BlockPublicPolicy: false
+          RestrictPublicBuckets: false
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders: ["*"]
+              AllowedMethods: [GET, PUT, POST, DELETE, HEAD]
+              AllowedOrigins: ["*"]
+              MaxAge: 3000
+
+    FilesBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref FilesBucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+              Resource: !Sub "arn:aws:s3:::${FilesBucket}/*"
+
+  Outputs:
+    BoxesTableName:
+      Value: ${self:provider.environment.BOXES_TABLE}
+      Export:
+        Name: ${self:service}-boxes-table-${self:provider.stage}
+
+    UsersTableName:
+      Value: ${self:provider.environment.USERS_TABLE}
+      Export:
+        Name: ${self:service}-users-table-${self:provider.stage}
+
+    FilesBucketName:
+      Value: ${self:provider.environment.S3_BUCKET}
+      Export:
+        Name: ${self:service}-files-bucket-${self:provider.stage}
+
+# パッケージング設定
+package:
+  individually: true

@@ -1,0 +1,11 @@
+{
+    "logGroups": [
+        {
+            "logGroupName": "/aws/lambda/qr-tracker-api-local-local-registerBox",
+            "creationTime": 1752221295571,
+            "metricFilterCount": 0,
+            "arn": "arn:aws:logs:us-east-1:000000000000:log-group:/aws/lambda/qr-tracker-api-local-local-registerBox:*",
+            "storedBytes": 5738
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+{
+    "events": [
+        {
+            "timestamp": 1752222392255,
+            "message": "START RequestId: 86eda276-ea7e-41e7-ad89-dfcc19cc0769 Version: $LATEST\n",
+            "ingestionTime": 1752222392284
+        },
+        {
+            "timestamp": 1752222392255,
+            "message": "2025-07-11T08:26:31.828Z\t86eda276-ea7e-41e7-ad89-dfcc19cc0769\tINFO\tgetUserBoxes handler called with event: {\r  \"headers\": {\r    \"Host\": \"localhost:4566\",\r    \"sec-ch-ua-platform\": \"\\\"macOS\\\"\",\r    \"User-Agent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36\",\r    \"sec-ch-ua\": \"\\\"Not)A;Brand\\\";v=\\\"8\\\", \\\"Chromium\\\";v=\\\"138\\\", \\\"Google Chrome\\\";v=\\\"138\\\"\",\r    \"DNT\": \"1\",\r    \"sec-ch-ua-mobile\": \"?0\",\r    \"Accept\": \"*/*\",\r    \"Origin\": \"https://localhost:3000\",\r    \"Sec-Fetch-Site\": \"cross-site\",\r    \"Sec-Fetch-Mode\": \"cors\",\r    \"Sec-Fetch-Dest\": \"empty\",\r    \"Accept-Encoding\": \"gzip, deflate, br, zstd\",\r    \"Accept-Language\": \"ja,en;q=0.9\",\r    \"X-Forwarded-For\": \"172.18.0.1\",\r    \"X-Forwarded-Port\": \"4566\",\r    \"X-Forwarded-Proto\": \"HTTP\",\r    \"X-Amzn-Trace-Id\": \"Root=1-6870caaf-f3a8149d6f06f443e92a236f;Parent=cc576172229f3f9b;Sampled=0\"\r  },\r  \"multiValueHeaders\": {\r    \"Host\": [\r      \"localhost:4566\"\r    ],\r    \"sec-ch-ua-platform\": [\r      \"\\\"macOS\\\"\"\r    ],\r    \"User-Agent\": [\r      \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36\"\r    ],\r    \"sec-ch-ua\": [\r      \"\\\"Not)A;Brand\\\";v=\\\"8\\\", \\\"Chromium\\\";v=\\\"138\\\", \\\"Google Chrome\\\";v=\\\"138\\\"\"\r    ],\r    \"DNT\": [\r      \"1\"\r    ],\r    \"sec-ch-ua-mobile\": [\r      \"?0\"\r    ],\r    \"Accept\": [\r      \"*/*\"\r    ],\r    \"Origin\": [\r      \"https://localhost:3000\"\r    ],\r    \"Sec-Fetch-Site\": [\r      \"cross-site\"\r    ],\r    \"Sec-Fetch-Mode\": [\r      \"cors\"\r    ],\r    \"Sec-Fetch-Dest\": [\r      \"empty\"\r    ],\r    \"Accept-Encoding\": [\r      \"gzip, deflate, br, zstd\"\r    ],\r    \"Accept-Language\": [\r      \"ja,en;q=0.9\"\r    ],\r    \"X-Forwarded-For\": [\r      \"172.18.0.1\"\r    ],\r    \"X-Forwarded-Port\": [\r      \"4566\"\r    ],\r    \"X-Forwarded-Proto\": [\r      \"HTTP\"\r    ],\r    \"X-Amzn-Trace-Id\": [\r      \"Root=1-6870caaf-f3a8149d6f06f443e92a236f;Parent=cc576172229f3f9b;Sampled=0\"\r    ]\r  },\r  \"body\": null,\r  \"isBase64Encoded\": false,\r  \"requestContext\": {\r    \"accountId\": \"000000000000\",\r    \"apiId\": \"btfnlqk3uu\",\r    \"deploymentId\": \"uqnlgiuf8o\",\r    \"domainName\": \"localhost:4566\",\r    \"domainPrefix\": \"localhost:4566\",\r    \"extendedRequestId\": \"4d3c791a\",\r    \"httpMethod\": \"GET\",\r    \"identity\": {\r      \"accountId\": null,\r      \"accessKey\": null,\r      \"caller\": null,\r      \"cognitoAuthenticationProvider\": null,\r      \"cognitoAuthenticationType\": null,\r      \"cognitoIdentityId\": null,\r      \"cognitoIdentityPoolId\": null,\r      \"principalOrgId\": null,\r      \"sourceIp\": \"127.0.0.1\",\r      \"user\": null,\r      \"userAgent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36\",\r      \"userArn\": null\r    },\r    \"path\": \"/local/user/boxes\",\r    \"protocol\": \"HTTP/1.1\",\r    \"requestId\": \"8ebbc6e2-074a-4515-91e0-942bcc059eb2\",\r    \"requestTime\": \"11/Jul/2025:08:26:23 \",\r    \"requestTimeEpoch\": 1752222383548,\r    \"stage\": \"local\",\r    \"resourcePath\": \"/user/boxes\",\r    \"resourceId\": \"djzr6bvcyb\"\r  },\r  \"stageVariables\": null,\r  \"queryStringParameters\": {\r    \"userId\": \"37340ac8-c021-707a-d4a3-db730af40872\"\r  },\r  \"multiValueQueryStringParameters\": {\r    \"userId\": [\r      \"37340ac8-c021-707a-d4a3-db730af40872\"\r    ]\r  },\r  \"pathParameters\": null,\r  \"httpMethod\": \"GET\",\r  \"path\": \"/user/boxes\",\r  \"resource\": \"/user/boxes\"\r}\n",
+            "ingestionTime": 1752222392284
+        },
+        {
+            "timestamp": 1752222392255,
+            "message": "2025-07-11T08:26:31.832Z\t86eda276-ea7e-41e7-ad89-dfcc19cc0769\tINFO\tUser ID: 37340ac8-c021-707a-d4a3-db730af40872\n",
+            "ingestionTime": 1752222392284
+        },
+        {
+            "timestamp": 1752222392255,
+            "message": "2025-07-11T08:26:31.832Z\t86eda276-ea7e-41e7-ad89-dfcc19cc0769\tINFO\tEnvironment variables: {\r  BOXES_TABLE: 'qr-tracker-api-local-boxes-local',\r  AWS_REGION: 'us-east-1'\r}\n",
+            "ingestionTime": 1752222392284
+        },
+        {
+            "timestamp": 1752222392255,
+            "message": "2025-07-11T08:26:31.837Z\t86eda276-ea7e-41e7-ad89-dfcc19cc0769\tINFO\tDynamoDB query params: {\r  \"TableName\": \"qr-tracker-api-local-boxes-local\",\r  \"IndexName\": \"UserIdIndex\",\r  \"KeyConditionExpression\": \"userId = :userId\",\r  \"ExpressionAttributeValues\": {\r    \":userId\": \"37340ac8-c021-707a-d4a3-db730af40872\"\r  },\r  \"ScanIndexForward\": false\r}\n",
+            "ingestionTime": 1752222392284
+        },
+        {
+            "timestamp": 1752222392255,
+            "message": "2025-07-11T08:26:32.244Z\t86eda276-ea7e-41e7-ad89-dfcc19cc0769\tINFO\tDynamoDB query result: {\r  \"Items\": [],\r  \"Count\": 0,\r  \"ScannedCount\": 0\r}\n",
+            "ingestionTime": 1752222392284
+        },
+        {
+            "timestamp": 1752222392255,
+            "message": "END RequestId: 86eda276-ea7e-41e7-ad89-dfcc19cc0769\n",
+            "ingestionTime": 1752222392284
+        },
+        {
+            "timestamp": 1752222392255,
+            "message": "REPORT RequestId: 86eda276-ea7e-41e7-ad89-dfcc19cc0769\tDuration: 441.24 ms\tBilled Duration: 442 ms\tMemory Size: 1024 MB\tMax Memory Used: 1024 MB\t\n",
+            "ingestionTime": 1752222392284
+        }
+    ],
+    "nextForwardToken": "f/00000000000000000000000000000000000000000000000000000007",
+    "nextBackwardToken": "b/00000000000000000000000000000000000000000000000000000000"
+}

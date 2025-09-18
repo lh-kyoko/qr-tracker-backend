@@ -1,0 +1,32 @@
+service: qr-tracker-api
+stage: dev
+region: ap-northeast-1
+stack: qr-tracker-api-dev
+endpoints:
+  GET - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/boxes/{id}
+  POST - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/boxes/{id}/register
+  PUT - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/boxes/{id}
+  GET - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/user/boxes
+  GET - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/boxes/{id}/status
+  POST - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/upload
+  PUT - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/boxes/{id}/favorite
+  POST - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/boxes/{id}/check-password
+  GET - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/boxes/{id}/expiration
+  POST - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/auth/forgot-password
+  POST - https://l502oi71fb.execute-api.ap-northeast-1.amazonaws.com/dev/auth/confirm-forgot-password
+functions:
+  getBox: qr-tracker-api-dev-getBox
+  registerBox: qr-tracker-api-dev-registerBox
+  updateBox: qr-tracker-api-dev-updateBox
+  getUserBoxes: qr-tracker-api-dev-getUserBoxes
+  checkBoxStatus: qr-tracker-api-dev-checkBoxStatus
+  uploadFile: qr-tracker-api-dev-uploadFile
+  toggleFavorite: qr-tracker-api-dev-toggleFavorite
+  checkPassword: qr-tracker-api-dev-checkPassword
+  checkExpiration: qr-tracker-api-dev-checkExpiration
+  forgotPassword: qr-tracker-api-dev-forgotPassword
+  confirmForgotPassword: qr-tracker-api-dev-confirmForgotPassword
+Serverless Domain Manager:
+  Domain Name: api.nest-tag.com
+  Target Domain: d-cr60skm17e.execute-api.ap-northeast-1.amazonaws.com
+  Hosted Zone Id: Z1YSHQZHG15GKL

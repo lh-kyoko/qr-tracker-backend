@@ -1,0 +1,21 @@
+{
+  "name": "qr-tracker-backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "serverless offline",
+    "deploy": "serverless deploy",
+    "remove": "serverless remove"
+  },
+  "devDependencies": {
+    "serverless-domain-manager": "^8.0.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.844.0",
+    "@aws-sdk/client-dynamodb": "^3.844.0",
+    "@aws-sdk/lib-dynamodb": "^3.844.0",
+    "@aws-sdk/s3-request-presigner": "^3.844.0",
+    "@zxing/browser": "^0.1.5",
+    "aws-jwt-verify": "^5.1.0"
+  }
+}

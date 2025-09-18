@@ -1,0 +1,528 @@
+{
+    "items": [
+        {
+            "id": "ke7werfbic",
+            "path": "/"
+        },
+        {
+            "id": "vynk2y7gri",
+            "parentId": "ke7werfbic",
+            "pathPart": "boxes",
+            "path": "/boxes"
+        },
+        {
+            "id": "15wi52yip3",
+            "parentId": "ke7werfbic",
+            "pathPart": "user",
+            "path": "/user"
+        },
+        {
+            "id": "uoff0lfy9u",
+            "parentId": "ke7werfbic",
+            "pathPart": "upload",
+            "path": "/upload",
+            "resourceMethods": {
+                "OPTIONS": {
+                    "httpMethod": "OPTIONS",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {
+                        "200": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": true,
+                                "method.response.header.Access-Control-Allow-Headers": true,
+                                "method.response.header.Access-Control-Allow-Methods": true
+                            },
+                            "responseModels": {}
+                        }
+                    },
+                    "methodIntegration": {
+                        "type": "MOCK",
+                        "requestTemplates": {
+                            "application/json": "{statusCode:200}"
+                        },
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "contentHandling": "CONVERT_TO_TEXT",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "uoff0lfy9u",
+                        "cacheKeyParameters": []
+                    }
+                },
+                "POST": {
+                    "httpMethod": "POST",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {},
+                    "methodIntegration": {
+                        "type": "AWS_PROXY",
+                        "httpMethod": "POST",
+                        "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:qr-tracker-api-local-local-uploadFile/invocations",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "uoff0lfy9u",
+                        "cacheKeyParameters": []
+                    }
+                }
+            }
+        },
+        {
+            "id": "zzw4iuwkvm",
+            "parentId": "ke7werfbic",
+            "pathPart": "auth",
+            "path": "/auth"
+        },
+        {
+            "id": "tuopfe2bcg",
+            "parentId": "vynk2y7gri",
+            "pathPart": "{id}",
+            "path": "/boxes/{id}",
+            "resourceMethods": {
+                "OPTIONS": {
+                    "httpMethod": "OPTIONS",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {
+                        "200": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": true,
+                                "method.response.header.Access-Control-Allow-Headers": true,
+                                "method.response.header.Access-Control-Allow-Methods": true
+                            },
+                            "responseModels": {}
+                        }
+                    },
+                    "methodIntegration": {
+                        "type": "MOCK",
+                        "requestTemplates": {
+                            "application/json": "{statusCode:200}"
+                        },
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "contentHandling": "CONVERT_TO_TEXT",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "tuopfe2bcg",
+                        "cacheKeyParameters": []
+                    }
+                },
+                "GET": {
+                    "httpMethod": "GET",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestValidatorId": "488819",
+                    "requestParameters": {
+                        "method.request.path.id": true
+                    },
+                    "methodResponses": {},
+                    "methodIntegration": {
+                        "type": "AWS_PROXY",
+                        "httpMethod": "POST",
+                        "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:qr-tracker-api-local-local-getBox/invocations",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "tuopfe2bcg",
+                        "cacheKeyParameters": []
+                    }
+                },
+                "PUT": {
+                    "httpMethod": "PUT",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestValidatorId": "488819",
+                    "requestParameters": {
+                        "method.request.path.id": true
+                    },
+                    "methodResponses": {},
+                    "methodIntegration": {
+                        "type": "AWS_PROXY",
+                        "httpMethod": "POST",
+                        "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:qr-tracker-api-local-local-updateBox/invocations",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "tuopfe2bcg",
+                        "cacheKeyParameters": []
+                    }
+                }
+            }
+        },
+        {
+            "id": "djzr6bvcyb",
+            "parentId": "15wi52yip3",
+            "pathPart": "boxes",
+            "path": "/user/boxes",
+            "resourceMethods": {
+                "OPTIONS": {
+                    "httpMethod": "OPTIONS",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {
+                        "200": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": true,
+                                "method.response.header.Access-Control-Allow-Headers": true,
+                                "method.response.header.Access-Control-Allow-Methods": true
+                            },
+                            "responseModels": {}
+                        }
+                    },
+                    "methodIntegration": {
+                        "type": "MOCK",
+                        "requestTemplates": {
+                            "application/json": "{statusCode:200}"
+                        },
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "contentHandling": "CONVERT_TO_TEXT",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "djzr6bvcyb",
+                        "cacheKeyParameters": []
+                    }
+                },
+                "GET": {
+                    "httpMethod": "GET",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {},
+                    "methodIntegration": {
+                        "type": "AWS_PROXY",
+                        "httpMethod": "POST",
+                        "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:qr-tracker-api-local-local-getUserBoxes/invocations",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "djzr6bvcyb",
+                        "cacheKeyParameters": []
+                    }
+                }
+            }
+        },
+        {
+            "id": "qj5ue6plcf",
+            "parentId": "zzw4iuwkvm",
+            "pathPart": "forgot-password",
+            "path": "/auth/forgot-password",
+            "resourceMethods": {
+                "OPTIONS": {
+                    "httpMethod": "OPTIONS",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {
+                        "200": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": true,
+                                "method.response.header.Access-Control-Allow-Headers": true,
+                                "method.response.header.Access-Control-Allow-Methods": true
+                            },
+                            "responseModels": {}
+                        }
+                    },
+                    "methodIntegration": {
+                        "type": "MOCK",
+                        "requestTemplates": {
+                            "application/json": "{statusCode:200}"
+                        },
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "contentHandling": "CONVERT_TO_TEXT",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "qj5ue6plcf",
+                        "cacheKeyParameters": []
+                    }
+                },
+                "POST": {
+                    "httpMethod": "POST",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {},
+                    "methodIntegration": {
+                        "type": "AWS_PROXY",
+                        "httpMethod": "POST",
+                        "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:qr-tracker-api-local-local-forgotPassword/invocations",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "qj5ue6plcf",
+                        "cacheKeyParameters": []
+                    }
+                }
+            }
+        },
+        {
+            "id": "sats6qicgs",
+            "parentId": "zzw4iuwkvm",
+            "pathPart": "confirm-forgot-password",
+            "path": "/auth/confirm-forgot-password",
+            "resourceMethods": {
+                "OPTIONS": {
+                    "httpMethod": "OPTIONS",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {
+                        "200": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": true,
+                                "method.response.header.Access-Control-Allow-Headers": true,
+                                "method.response.header.Access-Control-Allow-Methods": true
+                            },
+                            "responseModels": {}
+                        }
+                    },
+                    "methodIntegration": {
+                        "type": "MOCK",
+                        "requestTemplates": {
+                            "application/json": "{statusCode:200}"
+                        },
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "contentHandling": "CONVERT_TO_TEXT",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "sats6qicgs",
+                        "cacheKeyParameters": []
+                    }
+                },
+                "POST": {
+                    "httpMethod": "POST",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {},
+                    "methodIntegration": {
+                        "type": "AWS_PROXY",
+                        "httpMethod": "POST",
+                        "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:qr-tracker-api-local-local-confirmForgotPassword/invocations",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "sats6qicgs",
+                        "cacheKeyParameters": []
+                    }
+                }
+            }
+        },
+        {
+            "id": "u8psce9eu0",
+            "parentId": "tuopfe2bcg",
+            "pathPart": "register",
+            "path": "/boxes/{id}/register",
+            "resourceMethods": {
+                "OPTIONS": {
+                    "httpMethod": "OPTIONS",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {
+                        "200": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": true,
+                                "method.response.header.Access-Control-Allow-Headers": true,
+                                "method.response.header.Access-Control-Allow-Methods": true
+                            },
+                            "responseModels": {}
+                        }
+                    },
+                    "methodIntegration": {
+                        "type": "MOCK",
+                        "requestTemplates": {
+                            "application/json": "{statusCode:200}"
+                        },
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "contentHandling": "CONVERT_TO_TEXT",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "u8psce9eu0",
+                        "cacheKeyParameters": []
+                    }
+                },
+                "POST": {
+                    "httpMethod": "POST",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestValidatorId": "488819",
+                    "requestParameters": {
+                        "method.request.path.id": true
+                    },
+                    "methodResponses": {},
+                    "methodIntegration": {
+                        "type": "AWS_PROXY",
+                        "httpMethod": "POST",
+                        "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:qr-tracker-api-local-local-registerBox/invocations",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "u8psce9eu0",
+                        "cacheKeyParameters": []
+                    }
+                }
+            }
+        },
+        {
+            "id": "n89qgjsgme",
+            "parentId": "tuopfe2bcg",
+            "pathPart": "status",
+            "path": "/boxes/{id}/status",
+            "resourceMethods": {
+                "OPTIONS": {
+                    "httpMethod": "OPTIONS",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {
+                        "200": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": true,
+                                "method.response.header.Access-Control-Allow-Headers": true,
+                                "method.response.header.Access-Control-Allow-Methods": true
+                            },
+                            "responseModels": {}
+                        }
+                    },
+                    "methodIntegration": {
+                        "type": "MOCK",
+                        "requestTemplates": {
+                            "application/json": "{statusCode:200}"
+                        },
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "contentHandling": "CONVERT_TO_TEXT",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "n89qgjsgme",
+                        "cacheKeyParameters": []
+                    }
+                },
+                "GET": {
+                    "httpMethod": "GET",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestValidatorId": "488819",
+                    "requestParameters": {
+                        "method.request.path.id": true
+                    },
+                    "methodResponses": {},
+                    "methodIntegration": {
+                        "type": "AWS_PROXY",
+                        "httpMethod": "POST",
+                        "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:qr-tracker-api-local-local-checkBoxStatus/invocations",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "n89qgjsgme",
+                        "cacheKeyParameters": []
+                    }
+                }
+            }
+        },
+        {
+            "id": "62ib7xaszn",
+            "parentId": "tuopfe2bcg",
+            "pathPart": "favorite",
+            "path": "/boxes/{id}/favorite",
+            "resourceMethods": {
+                "OPTIONS": {
+                    "httpMethod": "OPTIONS",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {
+                        "200": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": true,
+                                "method.response.header.Access-Control-Allow-Headers": true,
+                                "method.response.header.Access-Control-Allow-Methods": true
+                            },
+                            "responseModels": {}
+                        }
+                    },
+                    "methodIntegration": {
+                        "type": "MOCK",
+                        "requestTemplates": {
+                            "application/json": "{statusCode:200}"
+                        },
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "contentHandling": "CONVERT_TO_TEXT",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "62ib7xaszn",
+                        "cacheKeyParameters": []
+                    }
+                },
+                "PUT": {
+                    "httpMethod": "PUT",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestValidatorId": "488819",
+                    "requestParameters": {
+                        "method.request.path.id": true
+                    },
+                    "methodResponses": {},
+                    "methodIntegration": {
+                        "type": "AWS_PROXY",
+                        "httpMethod": "POST",
+                        "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:qr-tracker-api-local-local-toggleFavorite/invocations",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "62ib7xaszn",
+                        "cacheKeyParameters": []
+                    }
+                }
+            }
+        },
+        {
+            "id": "6ziyguypax",
+            "parentId": "tuopfe2bcg",
+            "pathPart": "check-password",
+            "path": "/boxes/{id}/check-password",
+            "resourceMethods": {
+                "OPTIONS": {
+                    "httpMethod": "OPTIONS",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestParameters": {},
+                    "methodResponses": {
+                        "200": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": true,
+                                "method.response.header.Access-Control-Allow-Headers": true,
+                                "method.response.header.Access-Control-Allow-Methods": true
+                            },
+                            "responseModels": {}
+                        }
+                    },
+                    "methodIntegration": {
+                        "type": "MOCK",
+                        "requestTemplates": {
+                            "application/json": "{statusCode:200}"
+                        },
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "contentHandling": "CONVERT_TO_TEXT",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "6ziyguypax",
+                        "cacheKeyParameters": []
+                    }
+                },
+                "POST": {
+                    "httpMethod": "POST",
+                    "authorizationType": "NONE",
+                    "apiKeyRequired": false,
+                    "requestValidatorId": "488819",
+                    "requestParameters": {
+                        "method.request.path.id": true
+                    },
+                    "methodResponses": {},
+                    "methodIntegration": {
+                        "type": "AWS_PROXY",
+                        "httpMethod": "POST",
+                        "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:qr-tracker-api-local-local-checkPassword/invocations",
+                        "passthroughBehavior": "WHEN_NO_MATCH",
+                        "timeoutInMillis": 29000,
+                        "cacheNamespace": "6ziyguypax",
+                        "cacheKeyParameters": []
+                    }
+                }
+            }
+        }
+    ]
+}

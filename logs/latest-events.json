@@ -1,0 +1,41 @@
+{
+    "events": [
+        {
+            "timestamp": 1752287505125,
+            "message": "START RequestId: fa5812b7-480b-40c8-bcf1-09e08569e289 Version: $LATEST\n",
+            "ingestionTime": 1752287505184
+        },
+        {
+            "timestamp": 1752287505125,
+            "message": "2025-07-12T02:31:44.896Z\tfa5812b7-480b-40c8-bcf1-09e08569e289\tINFO\tEvent received: {\r  \"headers\": {\r    \"Host\": \"localstack:4566\",\r    \"User-Agent\": \"curl/7.88.1\",\r    \"Accept\": \"*/*\",\r    \"Content-Type\": \"application/json\",\r    \"X-Forwarded-For\": \"172.18.0.3\",\r    \"X-Forwarded-Port\": \"4566\",\r    \"X-Forwarded-Proto\": \"HTTP\",\r    \"X-Amzn-Trace-Id\": \"Root=1-6871c907-649ea78af2cc8b804ef46fcb;Parent=29fcc849086fd3f1;Sampled=0\"\r  },\r  \"multiValueHeaders\": {\r    \"Host\": [\r      \"localstack:4566\"\r    ],\r    \"User-Agent\": [\r      \"curl/7.88.1\"\r    ],\r    \"Accept\": [\r      \"*/*\"\r    ],\r    \"Content-Type\": [\r      \"application/json\"\r    ],\r    \"X-Forwarded-For\": [\r      \"172.18.0.3\"\r    ],\r    \"X-Forwarded-Port\": [\r      \"4566\"\r    ],\r    \"X-Forwarded-Proto\": [\r      \"HTTP\"\r    ],\r    \"X-Amzn-Trace-Id\": [\r      \"Root=1-6871c907-649ea78af2cc8b804ef46fcb;Parent=29fcc849086fd3f1;Sampled=0\"\r    ]\r  },\r  \"body\": \"{\\\"userId\\\":\\\"test-user\\\",\\\"title\\\":\\\"Test Box\\\",\\\"memo\\\":\\\"Test memo\\\"}\",\r  \"isBase64Encoded\": false,\r  \"requestContext\": {\r    \"accountId\": \"000000000000\",\r    \"apiId\": \"btfnlqk3uu\",\r    \"deploymentId\": \"uqnlgiuf8o\",\r    \"domainName\": \"localstack:4566\",\r    \"domainPrefix\": \"localstack:4566\",\r    \"extendedRequestId\": \"192ab253\",\r    \"httpMethod\": \"POST\",\r    \"identity\": {\r      \"accountId\": null,\r      \"accessKey\": null,\r      \"caller\": null,\r      \"cognitoAuthenticationProvider\": null,\r      \"cognitoAuthenticationType\": null,\r      \"cognitoIdentityId\": null,\r      \"cognitoIdentityPoolId\": null,\r      \"principalOrgId\": null,\r      \"sourceIp\": \"127.0.0.1\",\r      \"user\": null,\r      \"userAgent\": \"curl/7.88.1\",\r      \"userArn\": null\r    },\r    \"path\": \"/local/boxes/box01/register\",\r    \"protocol\": \"HTTP/1.1\",\r    \"requestId\": \"de162a03-620e-4450-9339-487568229354\",\r    \"requestTime\": \"12/Jul/2025:02:31:35 \",\r    \"requestTimeEpoch\": 1752287495129,\r    \"stage\": \"local\",\r    \"resourcePath\": \"/boxes/{id}/register\",\r    \"resourceId\": \"u8psce9eu0\"\r  },\r  \"stageVariables\": null,\r  \"queryStringParameters\": null,\r  \"multiValueQueryStringParameters\": null,\r  \"pathParameters\": {\r    \"id\": \"box01\"\r  },\r  \"httpMethod\": \"POST\",\r  \"path\": \"/boxes/box01/register\",\r  \"resource\": \"/boxes/{id}/register\"\r}\n",
+            "ingestionTime": 1752287505184
+        },
+        {
+            "timestamp": 1752287505125,
+            "message": "2025-07-12T02:31:44.899Z\tfa5812b7-480b-40c8-bcf1-09e08569e289\tINFO\tEvent body: {\"userId\":\"test-user\",\"title\":\"Test Box\",\"memo\":\"Test memo\"}\n",
+            "ingestionTime": 1752287505184
+        },
+        {
+            "timestamp": 1752287505125,
+            "message": "2025-07-12T02:31:44.899Z\tfa5812b7-480b-40c8-bcf1-09e08569e289\tINFO\tEvent body type: string\n",
+            "ingestionTime": 1752287505184
+        },
+        {
+            "timestamp": 1752287505125,
+            "message": "2025-07-12T02:31:44.899Z\tfa5812b7-480b-40c8-bcf1-09e08569e289\tINFO\tParsed body: { userId: 'test-user', title: 'Test Box', memo: 'Test memo' }\n",
+            "ingestionTime": 1752287505184
+        },
+        {
+            "timestamp": 1752287505125,
+            "message": "END RequestId: fa5812b7-480b-40c8-bcf1-09e08569e289\n",
+            "ingestionTime": 1752287505184
+        },
+        {
+            "timestamp": 1752287505125,
+            "message": "REPORT RequestId: fa5812b7-480b-40c8-bcf1-09e08569e289\tDuration: 236.32 ms\tBilled Duration: 237 ms\tMemory Size: 1024 MB\tMax Memory Used: 1024 MB\t\n",
+            "ingestionTime": 1752287505184
+        }
+    ],
+    "nextForwardToken": "f/00000000000000000000000000000000000000000000000000000006",
+    "nextBackwardToken": "b/00000000000000000000000000000000000000000000000000000000"
+}

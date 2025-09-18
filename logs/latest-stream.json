@@ -1,0 +1,15 @@
+{
+    "logStreams": [
+        {
+            "logStreamName": "2025/07/12/[$LATEST]365e42d4dd3c216ad7683a20972c73e9",
+            "creationTime": 1752287505181,
+            "firstEventTimestamp": 1752287505125,
+            "lastEventTimestamp": 1752287505125,
+            "lastIngestionTime": 1752287505184,
+            "uploadSequenceToken": "1",
+            "arn": "arn:aws:logs:us-east-1:000000000000:log-group:/aws/lambda/qr-tracker-api-local-local-registerBox:log-stream:2025/07/12/[$LATEST]365e42d4dd3c216ad7683a20972c73e9",
+            "storedBytes": 2860
+        }
+    ],
+    "NextToken": "eyJuZXh0VG9rZW4iOiBudWxsLCAiYm90b190cnVuY2F0ZV9hbW91bnQiOiAxfQ=="
+}

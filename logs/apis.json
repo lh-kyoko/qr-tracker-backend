@@ -1,0 +1,22 @@
+{
+    "items": [
+        {
+            "id": "btfnlqk3uu",
+            "name": "local-qr-tracker-api-local",
+            "createdDate": "2025-07-11T08:08:18+00:00",
+            "apiKeySource": "HEADER",
+            "endpointConfiguration": {
+                "types": [
+                    "REGIONAL"
+                ]
+            },
+            "tags": {
+                "aws:cloudformation:logical-id": "ApiGatewayRestApi",
+                "aws:cloudformation:stack-name": "qr-tracker-api-local-local",
+                "aws:cloudformation:stack-id": "arn:aws:cloudformation:us-east-1:000000000000:stack/qr-tracker-api-local-local/bbcedf21"
+            },
+            "disableExecuteApiEndpoint": false,
+            "rootResourceId": "ke7werfbic"
+        }
+    ]
+}
