@@ -1,1 +1,3 @@
-DOMAIN_NAME: api-dev.nest-tag.com 
+DOMAIN_NAME: api-dev.nest-tag.com
+NEXT_PUBLIC_USER_POOL_ID: ap-northeast-1_3URKJYlbN
+NEXT_PUBLIC_USER_POOL_CLIENT_ID: 6fs1te4imuq1jm081t9eh1o2sn

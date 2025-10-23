@@ -1,5 +1,7 @@
 service: qr-tracker-api
 
+useDotenv: true
+
 provider:
   name: aws
   runtime: nodejs18.x
@@ -58,6 +60,7 @@ provider:
     BOXES_TABLE: ${self:service}-boxes-${self:provider.stage}
     USERS_TABLE: ${self:service}-users-${self:provider.stage}
     BOX_IDS_TABLE: ${self:service}-box-ids-${self:provider.stage}
+    LABELS_TABLE: ${self:service}-labels-${self:provider.stage}
     S3_BUCKET: ${self:service}-files-${self:provider.stage}
     ALLOWED_ADMIN_IPS: ${env:ALLOWED_ADMIN_IPS, '127.0.0.1'}
     COGNITO_USER_POOL_ID: ${env:NEXT_PUBLIC_USER_POOL_ID}
@@ -81,6 +84,8 @@ provider:
             - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOXES_TABLE}/index/*"
             - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}"
             - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOX_IDS_TABLE}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LABELS_TABLE}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LABELS_TABLE}/index/*"
         - Effect: Allow
           Action:
             - s3:GetObject
@@ -389,7 +394,7 @@ functions:
           path: /admin/boxes
           method: get
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -411,7 +416,7 @@ functions:
           path: /admin/files/presigned
           method: post
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -472,7 +477,7 @@ functions:
           path: /admin/box-ids
           method: get
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -494,7 +499,7 @@ functions:
           path: /admin/box-ids
           method: post
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -516,7 +521,7 @@ functions:
           path: /admin/box-ids/{boxId}
           method: delete
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -542,7 +547,7 @@ functions:
           path: /admin/box-ids/upload
           method: post
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -566,7 +571,7 @@ functions:
           path: /admin/boxes/{id}
           method: delete
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -592,7 +597,7 @@ functions:
           path: /admin/export
           method: get
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -614,7 +619,7 @@ functions:
           path: /admin/users
           method: get
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -636,7 +641,7 @@ functions:
           path: /admin/users
           method: post
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -658,7 +663,7 @@ functions:
           path: /admin/users/{username}
           method: put
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -684,7 +689,7 @@ functions:
           path: /admin/users/{username}
           method: delete
           authorizer:
-            arn: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}"
+            arn: arn:aws:cognito-idp:ap-northeast-1:992382582858:userpool/${env:NEXT_PUBLIC_USER_POOL_ID}
           cors:
             origin: "*"
             headers:
@@ -701,6 +706,91 @@ functions:
               paths:
                 username: true
     # ログ設定
+    logRetentionInDays: 7
+
+  # ラベル関連
+  createLabel:
+    handler: src/handlers/createLabel.handler
+    events:
+      - http:
+          path: /labels
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    logRetentionInDays: 7
+
+  getLabels:
+    handler: src/handlers/getLabels.handler
+    events:
+      - http:
+          path: /labels
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+    logRetentionInDays: 7
+
+  updateLabel:
+    handler: src/handlers/updateLabel.handler
+    events:
+      - http:
+          path: /labels/{id}
+          method: put
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                id: true
+    logRetentionInDays: 7
+
+  deleteLabel:
+    handler: src/handlers/deleteLabel.handler
+    events:
+      - http:
+          path: /labels/{id}
+          method: delete
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-User-Id
+            allowCredentials: false
+          request:
+            parameters:
+              paths:
+                id: true
     logRetentionInDays: 7
 
 resources:
@@ -741,6 +831,27 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+
+    LabelsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.LABELS_TABLE}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: userId-index
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 
     BoxIdsTable:
       Type: AWS::DynamoDB::Table

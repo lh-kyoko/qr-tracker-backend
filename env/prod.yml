@@ -1,1 +1,3 @@
-DOMAIN_NAME: api.nest-tag.com 
+DOMAIN_NAME: api.nest-tag.com
+NEXT_PUBLIC_USER_POOL_ID: ap-northeast-1_Su99KZeV6
+NEXT_PUBLIC_USER_POOL_CLIENT_ID: 4m7cu9o7dd5tofdonuh0otv323

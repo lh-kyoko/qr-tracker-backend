@@ -1,0 +1,101 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'NestTag CloudFront with WAF IP Restriction'
+
+Parameters:
+  AmplifyDomainName:
+    Type: String
+    Description: 'Amplify app domain name'
+  
+  AllowedIPs:
+    Type: CommaDelimitedList
+    Description: 'List of allowed IP addresses for admin access'
+
+Resources:
+  # WAF Web ACL
+  WAFWebACL:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      Name: nesttag-admin-waf
+      Description: 'WAF for NestTag admin access control'
+      Scope: CLOUDFRONT
+      DefaultAction:
+        Allow: {}
+      Rules:
+        - Name: AdminIPRestriction
+          Priority: 1
+          Statement:
+            AndStatement:
+              Statements:
+                - ByteMatchStatement:
+                    SearchString: '/admin'
+                    FieldToMatch:
+                      UriPath: {}
+                    TextTransformations:
+                      - Priority: 1
+                        Type: NONE
+                - NotStatement:
+                    Statement:
+                      IPSetReferenceStatement:
+                        ARN: !GetAtt AdminIPSet.Arn
+          Action:
+            Block: {}
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: AdminIPRestriction
+      VisibilityConfig:
+        SampledRequestsEnabled: true
+        CloudWatchMetricsEnabled: true
+        MetricName: NestTagAdminWAF
+
+  # IP Set for allowed admin IPs
+  AdminIPSet:
+    Type: AWS::WAFv2::IPSet
+    Properties:
+      Name: nesttag-admin-allowed-ips
+      Description: 'Allowed IP addresses for admin access'
+      Scope: CLOUDFRONT
+      IPAddressVersion: IPV4
+      Addresses: !Ref AllowedIPs
+
+  # CloudFront Distribution
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - Id: AmplifyOrigin
+            DomainName: !Ref AmplifyDomainName
+            CustomOriginConfig:
+              HTTPPort: 443
+              HTTPSPort: 443
+              OriginProtocolPolicy: https-only
+        Enabled: true
+        DefaultCacheBehavior:
+          TargetOriginId: AmplifyOrigin
+          ViewerProtocolPolicy: redirect-to-https
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad  # CachingOptimized
+          OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf  # CORS-S3Origin
+          WebAclId: !GetAtt WAFWebACL.Arn
+        Aliases:
+          - !Ref AmplifyDomainName
+        ViewerCertificate:
+          AcmCertificateArn: !Ref SSLCertificate
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+
+  # SSL Certificate (ACM)
+  SSLCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref AmplifyDomainName
+      ValidationMethod: DNS
+
+Outputs:
+  CloudFrontDomainName:
+    Description: 'CloudFront Distribution Domain Name'
+    Value: !GetAtt CloudFrontDistribution.DomainName
+  
+  WAFWebACLArn:
+    Description: 'WAF Web ACL ARN'
+    Value: !GetAtt WAFWebACL.Arn 

@@ -59,22 +59,15 @@ const verifyCognitoToken = async (event) => {
         return null;
       }
       
-      // 管理者グループチェック
+      // 管理者グループチェックはここでは行わない（verifyAdminTokenで行う）
       console.log('cognito:groups:', payload['cognito:groups']);
       console.log('cognito:groups type:', typeof payload['cognito:groups']);
-      console.log('cognito:groups includes admins:', payload['cognito:groups'] && payload['cognito:groups'].includes('admins'));
-      
-      if (!payload['cognito:groups'] || !payload['cognito:groups'].includes('admins')) {
-        console.log('管理者グループに属していません');
-        console.log('Available groups:', payload['cognito:groups']);
-        return null;
-      }
       
       console.log('JWT認証成功');
       return { 
         sub: payload.sub,
-        'cognito:groups': payload['cognito:groups'],
-        username: payload.username,
+        'cognito:groups': payload['cognito:groups'] || [],
+        username: payload.username || payload['cognito:username'],
         attributes: []
       };
     } catch (jwtError) {

@@ -1,39 +1,31 @@
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
+const { verifyUserToken } = require('../utils/auth');
+const { handleOptions, successResponse, errorResponse } = require('../utils/cors');
 
 exports.handler = async (event) => {
+  if (event.httpMethod === "OPTIONS") {
+    return handleOptions();
+  }
+
   try {
+    // 認証チェック
+    const authResult = await verifyUserToken(event);
+    if (!authResult.success) {
+      return errorResponse(authResult.error, 401);
+    }
+
     const boxId = event.pathParameters.id;
     
     if (!boxId) {
-      return {
-        statusCode: 400,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
-        },
-        body: JSON.stringify({
-          error: 'Box ID is required'
-        })
-      };
+      return errorResponse('Box ID is required', 400);
     }
 
     const body = JSON.parse(event.body);
     const { userId, isFavorite } = body;
 
     if (!userId) {
-      return {
-        statusCode: 400,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
-        },
-        body: JSON.stringify({
-          error: 'User ID is required'
-        })
-      };
+      return errorResponse('User ID is required', 400);
     }
 
     // BOXが存在するかチェック
@@ -43,32 +35,12 @@ exports.handler = async (event) => {
     }).promise();
 
     if (!existingBox.Item) {
-      return {
-        statusCode: 404,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
-        },
-        body: JSON.stringify({
-          error: 'Box not found'
-        })
-      };
+      return errorResponse('Box not found', 404);
     }
 
     // 作成者かどうかチェック
     if (existingBox.Item.userId !== userId) {
-      return {
-        statusCode: 403,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
-        },
-        body: JSON.stringify({
-          error: 'You can only toggle favorite for boxes you created'
-        })
-      };
+      return errorResponse('You can only toggle favorite for boxes you created', 403);
     }
 
     const now = new Date().toISOString();
@@ -87,31 +59,13 @@ exports.handler = async (event) => {
 
     const updateResult = await dynamodb.update(updateParams).promise();
 
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
-      },
-      body: JSON.stringify({
-        message: 'Favorite status updated successfully',
-        box: updateResult.Attributes
-      })
-    };
+    return successResponse({
+      message: 'Favorite status updated successfully',
+      box: updateResult.Attributes
+    });
 
   } catch (error) {
     console.error('Error:', error);
-    return {
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
-      },
-      body: JSON.stringify({
-        error: 'Internal server error'
-      })
-    };
+    return errorResponse('Internal server error', 500);
   }
 }; 
